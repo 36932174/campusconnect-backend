@@ -22,7 +22,7 @@ export class UploadsController {
   @Post('image')
   @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
   async uploadImage(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: any,
   ) {
     if (!file) throw new BadRequestException('No file provided');
     return this.uploadsService.uploadFile(file, 'images');
@@ -31,7 +31,7 @@ export class UploadsController {
   @Post('document')
   @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
   async uploadDocument(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: any,
   ) {
     if (!file) throw new BadRequestException('No file provided');
     return this.uploadsService.uploadFile(file, 'documents');
@@ -43,7 +43,7 @@ export class UploadsController {
     limits: { fileSize: 5 * 1024 * 1024 },
   }))
   async uploadAvatar(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: any,
     @CurrentUser('id') userId: string,
   ) {
     if (!file) throw new BadRequestException('No file provided');
@@ -54,7 +54,7 @@ export class UploadsController {
   @Post('resource')
   @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
   async uploadResource(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: any,
   ) {
     if (!file) throw new BadRequestException('No file provided');
     return this.uploadsService.uploadFile(file, 'resources');

@@ -35,7 +35,7 @@ export class UploadsService {
     fs.mkdir(this.uploadDir, { recursive: true }).catch(() => {});
   }
 
-  async validateFile(file: Express.Multer.File): Promise<void> {
+  async validateFile(file: any): Promise<void> {
     if (!file) throw new BadRequestException('No file provided');
 
     if (file.size > MAX_FILE_SIZE) {
@@ -56,7 +56,7 @@ export class UploadsService {
     }
   }
 
-  private validateFileSignature(file: Express.Multer.File): boolean {
+  private validateFileSignature(file: any): boolean {
     const buffer = file.buffer;
     const signatures: Record<string, Uint8Array[]> = {
       'image/jpeg': [new Uint8Array([0xFF, 0xD8, 0xFF])],
@@ -75,7 +75,7 @@ export class UploadsService {
     );
   }
 
-  async uploadFile(file: Express.Multer.File, directory: string = 'general'): Promise<{ url: string; filename: string; size: number; mimeType: string }> {
+  async uploadFile(file: any, directory: string = 'general'): Promise<{ url: string; filename: string; size: number; mimeType: string }> {
     await this.validateFile(file);
 
     const ext = path.extname(file.originalname);
