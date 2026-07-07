@@ -4,7 +4,7 @@
   "description": "CampusConnect Social Learning Platform - Backend",
   "private": true,
   "scripts": {
-    "build": "npx nest build",
+    "build": "./node_modules/.bin/tsc -p tsconfig.json",
     "start": "node dist/main",
     "start:dev": "npx nest start --watch",
     "start:prod": "node dist/main",
