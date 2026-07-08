@@ -43,7 +43,11 @@ import { SecurityMiddleware } from './common/middleware/security.middleware';
             synchronize: true,
             logging: ['error'],
             ssl: { rejectUnauthorized: false },
-            extra: { max: 25 },
+            extra: {
+              max: 25,
+              idleTimeoutMillis: 30000,
+              connectionTimeoutMillis: 5000,
+            },
           };
         }
         return {
