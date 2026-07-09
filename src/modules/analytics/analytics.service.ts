@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { User } from '../../database/entities/user.entity';
 import { Note } from '../../database/entities/note.entity';
 import { Follow } from '../../database/entities/follow.entity';
+import { Group } from '../../database/entities/group.entity';
+import { Assignment } from '../../database/entities/assignment.entity';
 
 @Injectable()
 export class AnalyticsService {
@@ -14,6 +16,10 @@ export class AnalyticsService {
     private readonly noteRepository: Repository<Note>,
     @InjectRepository(Follow)
     private readonly followRepository: Repository<Follow>,
+    @InjectRepository(Group)
+    private readonly groupRepository: Repository<Group>,
+    @InjectRepository(Assignment)
+    private readonly assignmentRepository: Repository<Assignment>,
   ) {}
 
   async getUserStats(userId: string) {
@@ -63,6 +69,27 @@ export class AnalyticsService {
     return {
       ...stats,
       recentNotes,
+    };
+  }
+
+  async getPublicStats() {
+    const [totalUsers, totalNotes, totalGroups, totalDownloads, totalAssignments] = await Promise.all([
+      this.userRepository.count(),
+      this.noteRepository.count(),
+      this.groupRepository.count(),
+      this.noteRepository
+        .createQueryBuilder('note')
+        .select('COALESCE(SUM(note.downloadCount), 0)', 'total')
+        .getRawOne()
+        .then(r => parseInt(r.total)),
+      this.assignmentRepository.count(),
+    ]);
+
+    return {
+      totalUsers,
+      totalResources: totalNotes + totalAssignments,
+      totalStudyGroups: totalGroups,
+      totalDownloads,
     };
   }
 }
